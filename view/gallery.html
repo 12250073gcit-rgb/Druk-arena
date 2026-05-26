@@ -61,20 +61,6 @@
   </div>
 </div>
 
-<script>
-  window.galleryRulesAccepted = false;
-  window.acceptGalleryRules = function () {
-    window.galleryRulesAccepted = true;
-    document.body.dataset.galleryRulesAccepted = 'true';
-    var modal = document.getElementById('gallery-rules-modal');
-    if (modal) modal.classList.remove('open');
-  };
-  document.addEventListener('DOMContentLoaded', function () {
-    var agree = document.getElementById('gallery-rules-agree');
-    if (agree) agree.addEventListener('click', window.acceptGalleryRules);
-  });
-</script>
-
 <script src="js/preview.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/auth.js"></script>
