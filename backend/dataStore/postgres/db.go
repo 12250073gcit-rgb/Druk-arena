@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -22,13 +25,12 @@ func init() {
 	password := getEnv("POSTGRES_PASSWORD", "postgres")
 	dbname := getEnv("POSTGRES_DBNAME", "drukarena_db")
 
-	// For fly.io: DATABASE_URL overrides individual params
+	// DATABASE_URL overrides individual params on hosted providers like Render.
 	databaseURL := os.Getenv("DATABASE_URL")
 
 	var err error
 	if databaseURL != "" {
-		// fly.io provides a full connection string
-		Db, err = sql.Open("postgres", databaseURL)
+		Db, err = sql.Open("postgres", normalizeDatabaseURL(databaseURL))
 	} else {
 		if err = ensureLocalDatabase(host, port, user, password, dbname); err != nil {
 			log.Fatal("Cannot create or verify database: ", err)
@@ -46,7 +48,7 @@ func init() {
 		panic(err)
 	}
 
-	if err = Db.Ping(); err != nil {
+	if err = pingWithRetry(Db, 10, 2*time.Second); err != nil {
 		log.Fatal("Cannot connect to database: ", err)
 	}
 
@@ -62,6 +64,42 @@ func getEnv(key, fallback string) string {
 		return val
 	}
 	return fallback
+}
+
+func normalizeDatabaseURL(databaseURL string) string {
+	parsed, err := url.Parse(databaseURL)
+	if err != nil || parsed.Hostname() == "" {
+		return databaseURL
+	}
+
+	query := parsed.Query()
+	if query.Get("sslmode") != "" {
+		return databaseURL
+	}
+
+	host := strings.ToLower(parsed.Hostname())
+	if host == "localhost" || host == "127.0.0.1" || host == "::1" {
+		query.Set("sslmode", "disable")
+	} else {
+		query.Set("sslmode", "require")
+	}
+	parsed.RawQuery = query.Encode()
+	return parsed.String()
+}
+
+func pingWithRetry(db *sql.DB, attempts int, delay time.Duration) error {
+	var err error
+	for i := 1; i <= attempts; i++ {
+		err = db.Ping()
+		if err == nil {
+			return nil
+		}
+		if i < attempts {
+			log.Printf("Database ping failed, retrying (%d/%d): %v", i, attempts, err)
+			time.Sleep(delay)
+		}
+	}
+	return err
 }
 
 func ensureLocalDatabase(host, port, user, password, dbname string) error {
