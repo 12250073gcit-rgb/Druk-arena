@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/signup-page.css">
+</head>
+<body class="signup-page">
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"><img src="logo.png" alt="DrukArena"></a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item"><span class="nav-icon">⚔</span>Events</a>
+</nav>
+
+<main class="main-content auth-main">
+  <div class="form-container">
+
+    <div class="auth-logo-wrap">
+      <img src="logo.png" alt="DrukArena" class="auth-logo">
+    </div>
+
+    <h1 class="form-title auth-title">Sign Up</h1>
+    <p class="form-subtitle auth-subtitle">Create your DrukArena account. First signup becomes admin.</p>
+
+    <div class="alert alert-error" id="error-msg"></div>
+    <div class="alert alert-success" id="success-msg"></div>
+
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input class="form-input" type="text" id="username" placeholder="gamer_tag" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="password-field">
+        <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="new-password">
+        <button class="password-toggle" type="button" data-password-toggle data-target="password" aria-label="Show password" aria-pressed="false"></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <div class="password-field">
+        <input class="form-input" type="password" id="confirm-password" placeholder="••••••••" autocomplete="new-password">
+        <button class="password-toggle" type="button" data-password-toggle data-target="confirm-password" aria-label="Show password" aria-pressed="false"></button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full auth-submit" onclick="signup()">
+      JOIN THE ARENA
+    </button>
+
+    <div class="form-footer auth-footer">
+      Already have an account? <a href="/login" class="form-link">Login here</a>
+    </div>
+  </div>
+</main>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

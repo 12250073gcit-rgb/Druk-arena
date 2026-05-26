@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Tournament — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/create-tournament-page.css">
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item active"><span class="nav-icon">⚔</span>Competitions</a>
+  <a href="/admin" class="nav-item"><span class="nav-icon">⚙</span>Admin</a>
+</nav>
+
+<main class="main-content tournament-form-page">
+
+  <div class="create-page-heading">
+    <a href="/tournaments" class="back-link">← BACK TO TOURNAMENTS</a>
+    <h1 class="page-header-title create-title">Create Tournament</h1>
+  </div>
+
+  <div class="alert alert-error" id="error-msg"></div>
+  <div class="alert alert-success" id="success-msg"></div>
+
+  <div class="glass-panel">
+    <div class="create-form-grid">
+
+      <div class="form-group form-span-full">
+        <label class="form-label">Tournament Title</label>
+        <input class="form-input" type="text" id="title" placeholder="e.g. DrukArena Valorant Open 2026">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Game Title</label>
+        <select class="form-select" id="game_title">
+          <option value="">Select a game or sport...</option>
+          <option>Mobile Legends</option>
+          <option>PUBG</option>
+          <option>Valorant</option>
+          <option>Football</option>
+          <option>Basketball</option>
+          <option>Volleyball</option>
+          <option>Badminton</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="status">
+          <option value="upcoming">Upcoming</option>
+          <option value="ongoing">Ongoing</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Start Date & Time</label>
+        <input class="form-input" type="datetime-local" id="start_date">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">End Date & Time</label>
+        <input class="form-input" type="datetime-local" id="end_date">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Venue</label>
+        <input class="form-input" type="text" id="venue" placeholder="e.g. Thimphu Tech Park">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Max Players</label>
+        <input class="form-input" type="number" id="max_teams" value="16" min="1" max="256">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Prize Pool</label>
+        <input class="form-input" type="text" id="prize_pool" placeholder="e.g. Nu. 50,000">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Image URL (optional)</label>
+        <input class="form-input" type="url" id="image_url" placeholder="https://...">
+      </div>
+
+      <div class="form-group form-span-full">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="description" rows="4" placeholder="Describe the tournament..."></textarea>
+      </div>
+
+    </div>
+
+    <div class="create-actions">
+      <button class="btn btn-primary" onclick="createTournament()">Create Tournament</button>
+      <a href="/tournaments" class="btn btn-secondary">Cancel</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/tournaments.js"></script>
+
+<script>
+  // Redirect if not logged in. Player-hosted tournaments wait for admin approval.
+  window.addEventListener('load', () => {
+    checkAuth().then(user => {
+      if (!user) {
+        window.location.href = '/login';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

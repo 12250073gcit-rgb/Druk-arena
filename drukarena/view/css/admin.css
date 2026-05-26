@@ -1,0 +1,147 @@
+/* DrukArena Admin Dashboard — Dragon Gold Theme */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap');
+
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh);
+}
+
+.admin-sidebar {
+  background: linear-gradient(180deg, #0d0500, #080808);
+  border-right: 1px solid rgba(212,160,23,0.25);
+  padding: 32px 0;
+}
+
+.admin-sidebar-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(212,160,23,0.4);
+  padding: 0 20px 16px;
+}
+
+.admin-nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700;
+  transition: 0.2s ease; cursor: pointer;
+  border: none; background: none; width: 100%; text-align: left;
+  letter-spacing: 1px; text-transform: uppercase;
+  border-left: 2px solid transparent;
+}
+.admin-nav-item:hover,
+.admin-nav-item.active {
+  color: var(--gold-bright);
+  background: rgba(212,160,23,0.06);
+  border-left-color: var(--gold-main);
+}
+
+.admin-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.admin-main { padding: 40px; overflow-y: auto; }
+
+.admin-section { display: none; }
+.admin-section.active { display: block; }
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px; margin-bottom: 40px;
+}
+
+.quick-action-card {
+  background: linear-gradient(135deg, rgba(20,10,0,0.7), rgba(10,8,0,0.9));
+  border: 1px solid rgba(212,160,23,0.25);
+  border-radius: 4px; padding: 24px; text-align: center;
+  cursor: pointer; transition: 0.2s ease;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.quick-action-card:hover {
+  border-color: var(--gold-main);
+  background: linear-gradient(135deg, rgba(30,15,0,0.8), rgba(15,10,0,0.95));
+  box-shadow: 0 0 20px rgba(212,160,23,0.15);
+}
+.quick-action-icon { font-size: 32px; }
+.quick-action-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+
+.add-news-form {
+  background: linear-gradient(135deg, rgba(20,10,0,0.5), rgba(10,8,0,0.8));
+  border: 1px solid rgba(212,160,23,0.25);
+  border-radius: 4px; padding: 28px; margin-bottom: 28px;
+  position: relative;
+}
+.add-news-form::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--red-main), var(--gold-main));
+}
+.add-news-form h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 700; font-size: 12px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold-dark); margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-sidebar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px 16px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(212,160,23,0.25);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .admin-sidebar-title {
+    display: none;
+  }
+  .admin-nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px;
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+  .admin-nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--gold-main);
+  }
+  .admin-main { padding: 20px; }
+  .quick-action-card {
+    clip-path: none;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 540px) {
+  .admin-main {
+    padding: 18px 14px;
+  }
+  .quick-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .quick-action-card {
+    padding: 18px 12px;
+  }
+  .quick-action-icon {
+    font-size: 24px;
+  }
+  .add-news-form {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}

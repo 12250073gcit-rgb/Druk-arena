@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/news-page.css">
+</head>
+<body>
+
+<nav class="sidebar"></nav>
+
+<main class="main-content">
+  <div class="page-header news-page-header">
+    <div>
+      <h1 class="page-header-title">DrukArena News</h1>
+      <p class="page-header-sub">Tournament announcements, match updates, and community stories.</p>
+    </div>
+    <div class="news-tools">
+      <input class="form-input news-search" id="news-search" type="search" placeholder="Search news...">
+      <select class="form-select news-sort" id="news-sort" aria-label="Sort news">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="title">Title A-Z</option>
+      </select>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Latest Updates</h2>
+        <p class="section-subtitle" id="news-count">Loading news...</p>
+      </div>
+    </div>
+
+    <div class="news-grid news-page-grid" id="news-grid">
+      <div class="news-page-loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="news-modal">
+  <div class="modal news-modal">
+    <button class="modal-close" onclick="closeNewsModal()">✕</button>
+    <div id="news-modal-content"></div>
+  </div>
+</div>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/news.js"></script>
+
+</body>
+</html>

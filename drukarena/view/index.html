@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrukArena — Bhutan Esports Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo">
+    <img src="logo.png" alt="DrukArena">
+  </a>
+
+  <a href="/" class="nav-item active">
+    <span class="nav-icon">⌂</span>Home
+  </a>
+  <a href="/tournaments" class="nav-item">
+    <span class="nav-icon">⚔</span>Competitions
+  </a>
+  <a href="/teams" class="nav-item">
+    <span class="nav-icon">👥</span>Teams
+  </a>
+  <a href="/matches" class="nav-item">
+    <span class="nav-icon">📊</span>Matches
+  </a>
+  <a href="#news" class="nav-item">
+    <span class="nav-icon">📰</span>News
+  </a>
+
+  <div class="nav-divider"></div>
+
+  <button id="admin-nav-item" class="nav-item" style="display:none;" onclick="window.location.href='/admin'">
+    <span class="nav-icon">⚙</span>Admin
+  </button>
+
+  <a href="/login" class="nav-item logout-btn" id="auth-btn">
+    <span class="nav-icon">👤</span>Login
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main class="main-content">
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-eyebrow">06 July – 23 August 2026 &nbsp;·&nbsp; Season 1</div>
+
+    <h1 class="hero-title">DRUK ARENA</h1>
+
+    <p class="hero-tagline">
+      Nothing is granted — DrukArena is Bhutan's premier<br>
+      esports & college sports tournament platform
+    </p>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown">
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-days">30</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-hours">16</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-mins">54</span>
+        <span class="countdown-label">Minutes</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-secs">48</span>
+        <span class="countdown-label">Seconds</span>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="/tournaments" class="btn btn-primary">⚔ View Tournaments</a>
+      <a href="/signup" class="btn btn-secondary">Join DrukArena</a>
+    </div>
+  </section>
+
+  <!-- gold divider -->
+  <div class="home-divider"></div>
+
+  <!-- ── UPCOMING EVENTS ── -->
+  <section class="section" id="events">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Upcoming Events</h2>
+        <p class="section-subtitle">Active qualifiers and tournaments</p>
+      </div>
+      <a href="/tournaments" class="see-all">See All</a>
+    </div>
+    <div class="tournaments-grid" id="upcoming-tournaments">
+      <div class="home-loading">
+        <div class="spinner"></div>
+        <p class="home-loading-label">Loading events...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLUB QUALIFICATION LEADERS ── -->
+  <section class="section home-leaderboard-section" id="leaderboard">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Club Qualification Leaders</h2>
+        <p class="section-subtitle">Top teams this season</p>
+      </div>
+      <a href="/teams" class="see-all">Visit Road to DrukArena</a>
+    </div>
+    <div class="leaderboard-grid">
+      <div class="rank-card">
+        <div class="rank-number gold">#1</div>
+        <div class="rank-avatar">D</div>
+        <div class="rank-info">
+          <div class="rank-label">Club</div>
+          <div class="rank-name">Druk Elite</div>
+          <div class="rank-meta">🏅 qualifications: 9</div>
+        </div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-number silver">#2</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#1a1a6e,#4444cc)">R</div>
+        <div class="rank-info">
+          <div class="rank-label">Club</div>
+          <div class="rank-name">Royal Gaming</div>
+          <div class="rank-meta">🏅 qualifications: 6</div>
+        </div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-number bronze">#3</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#3a1a00,#aa6600)">P</div>
+        <div class="rank-info">
+          <div class="rank-label">Club</div>
+          <div class="rank-name">Paro Prodigies</div>
+          <div class="rank-meta">🏅 qualifications: 6</div>
+        </div>
+      </div>
+    </div>
+    <div class="home-center-action">
+      <a href="/teams" class="btn btn-secondary">Visit Road to DrukArena</a>
+    </div>
+  </section>
+
+  <!-- ── LATEST NEWS ── -->
+  <section class="section" id="news">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Latest News From DrukArena</h2>
+        <p class="section-subtitle">Stay On Top of the Action!</p>
+      </div>
+      <a href="/news" class="see-all">See All News</a>
+    </div>
+    <div class="news-grid" id="news-grid">
+      <div style="grid-column:1/-1; text-align:center; padding:40px;">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GAME TITLES ── -->
+  <div class="game-titles-strip">
+    <div class="game-title-heading">
+      <span>Games & Sports in 2026</span>
+    </div>
+    <div class="game-titles-grid">
+      <div class="game-title-item">📱 MOBILE LEGENDS</div>
+      <div class="game-title-item">🔫 PUBG</div>
+      <div class="game-title-item">🎯 VALORANT</div>
+      <div class="game-title-item">⚽ FOOTBALL</div>
+      <div class="game-title-item">🏀 BASKETBALL</div>
+      <div class="game-title-item">🏐 VOLLEYBALL</div>
+      <div class="game-title-item">🏸 BADMINTON</div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <img src="logo.png" alt="DrukArena" class="footer-logo">
+          <div class="footer-brand">DRUK ARENA</div>
+        </div>
+        <p class="footer-desc">Bhutan's premier centralized digital platform for esports tournaments and college gaming events.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-links">
+          <li><a href="/tournaments">Tournaments</a></li>
+          <li><a href="/teams">Teams</a></li>
+          <li><a href="/matches">Matches</a></li>
+          <li><a href="/news">News</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Account</div>
+        <ul class="footer-links">
+          <li><a href="/signup">Sign Up</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/admin">Admin</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Info</div>
+        <ul class="footer-links">
+          <li><a href="#">Rules & Regulations</a></li>
+          <li><a href="#">Prize Information</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 DrukArena — All Rights Reserved.</span>
+      <span class="footer-spirit">Powered by the Dragon Spirit</span>
+    </div>
+  </footer>
+
+</main>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/news.js"></script>
+<script src="js/tournaments.js"></script>
+
+<script>
+  // ── Live Countdown to July 6 2026 ──────────────
+  const target = new Date('2026-07-06T00:00:00');
+  function updateCountdown() {
+    const diff = target - new Date();
+    if (diff <= 0) {
+      document.getElementById('countdown') &&
+        (document.getElementById('countdown').innerHTML =
+          '<span style="font-family:Orbitron,sans-serif;font-size:20px;color:var(--gold-bright);letter-spacing:4px;">🔴 EVENT IS LIVE!</span>');
+      return;
+    }
+    const pad = n => String(Math.floor(n)).padStart(2,'0');
+    document.getElementById('cd-days').textContent  = pad(diff / 864e5);
+    document.getElementById('cd-hours').textContent = pad((diff % 864e5) / 36e5);
+    document.getElementById('cd-mins').textContent  = pad((diff % 36e5) / 6e4);
+    document.getElementById('cd-secs').textContent  = pad((diff % 6e4) / 1e3);
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ── Load Upcoming Tournaments ──────────────────
+  window.addEventListener('load', () => {
+    fetch('/api/tournaments')
+      .then(r => r.json())
+      .then(data => {
+        const list = Array.isArray(data) ? data.slice(0,3) : [];
+        const c = document.getElementById('upcoming-tournaments');
+        if (list.length === 0) {
+          c.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🐉</div><div class="empty-state-title">No Tournaments Yet</div><div class="empty-state-desc">Check back soon — the dragon awakens.</div></div>';
+          return;
+        }
+        c.innerHTML = list.map(t => buildTournamentCard(t)).join('');
+      })
+      .catch(() => {
+        document.getElementById('upcoming-tournaments').innerHTML =
+          '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🐉</div><div class="empty-state-title">Coming Soon</div></div>';
+      });
+  });
+</script>
+
+</body>
+</html>

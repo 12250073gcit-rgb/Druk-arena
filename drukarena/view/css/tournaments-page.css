@@ -1,0 +1,63 @@
+/* Tournaments page */
+
+.tournaments-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tournaments-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.year-pill {
+  font-size: 12px;
+  font-weight: 700;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 4px;
+  letter-spacing: 2px;
+}
+
+.tournaments-tabs {
+  margin-top: 32px;
+}
+
+.tournaments-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+}
+
+.tournaments-loading p {
+  margin-top: 16px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .tournaments-header-row,
+  .tournaments-header-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tournaments-header-actions .btn,
+  .year-pill {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .tournaments-tabs {
+    margin-top: 24px;
+  }
+
+  .tournaments-loading {
+    padding: 44px 16px;
+  }
+}

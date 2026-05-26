@@ -1,0 +1,71 @@
+/* Teams page */
+
+.team-create-panel {
+  display: none;
+  margin-bottom: 40px;
+}
+
+.team-form-title,
+.teams-list-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.team-form-title {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.team-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.teams-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.teams-list-title {
+  font-size: 20px;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.teams-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+}
+
+@media (max-width: 640px) {
+  .team-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .teams-toolbar .btn {
+    width: 100%;
+  }
+
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-loading {
+    padding: 44px 16px;
+  }
+}

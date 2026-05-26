@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matches — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/matches-page.css">
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item"><span class="nav-icon">⚔</span>Competitions</a>
+  <a href="/teams" class="nav-item"><span class="nav-icon">👥</span>Teams</a>
+  <a href="/matches" class="nav-item active"><span class="nav-icon">📊</span>Matches</a>
+</nav>
+
+<main class="main-content">
+
+  <div class="page-header">
+    <h1 class="page-header-title">Match Schedule</h1>
+    <p class="page-header-sub">All scheduled, ongoing, and completed matches.</p>
+  </div>
+
+  <div class="section">
+    <div class="admin-table-wrapper">
+      <div class="admin-table-header">
+        <span class="admin-table-title">All Matches</span>
+        <span class="match-count" id="match-count"></span>
+      </div>
+      <table class="data-table" id="matches-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Team 1</th>
+            <th>vs</th>
+            <th>Team 2</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Score</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="matches-tbody">
+          <tr><td colspan="8" class="matches-loading"><div class="spinner"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/matches.js"></script>
+
+<script>
+  window.addEventListener('load', () => {
+    loadMatches();
+  });
+
+  function loadMatches() {
+    fetch('/api/matches')
+      .then(r => r.json())
+      .then(data => {
+        const matches = Array.isArray(data) ? data : [];
+        document.getElementById('match-count').textContent = matches.length + ' matches';
+        const tbody = document.getElementById('matches-tbody');
+        if (matches.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-secondary);">No matches scheduled yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = matches.map(m => {
+          const statusColor = m.status === 'completed' ? 'var(--text-secondary)' : m.status === 'live' ? 'var(--neon-red)' : 'var(--neon-green)';
+          const score = (m.score_team1 && m.score_team2)
+            ? `<strong style="color:var(--neon-green)">${m.score_team1}</strong> – <strong style="color:var(--neon-green)">${m.score_team2}</strong>`
+            : '<span style="color:var(--text-secondary)">—</span>';
+          return `
+            <tr>
+              <td style="color:var(--text-secondary)">${m.match_id}</td>
+              <td><strong>${m.team1_name || 'Team #' + m.team1_id}</strong></td>
+              <td style="color:var(--text-secondary); font-size:11px; letter-spacing:2px; font-weight:700;">VS</td>
+              <td><strong>${m.team2_name || 'Team #' + m.team2_id}</strong></td>
+              <td style="color:var(--text-secondary)">${m.match_date || '—'}</td>
+              <td style="color:var(--text-secondary)">${m.match_time || '—'}</td>
+              <td>${score}</td>
+              <td><span style="font-size:10px; font-weight:700; letter-spacing:1px; color:${statusColor}; text-transform:uppercase;">${m.status}</span></td>
+            </tr>
+          `;
+        }).join('');
+      })
+      .catch(() => {
+        document.getElementById('matches-tbody').innerHTML =
+          '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-secondary);">Could not load matches.</td></tr>';
+      });
+  }
+</script>
+
+</body>
+</html>

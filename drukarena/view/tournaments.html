@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournaments — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/tournaments-page.css">
+</head>
+
+<body>
+
+  <nav class="sidebar">
+    <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+    <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+    <a href="/tournaments" class="nav-item active"><span class="nav-icon">⚔</span>Competitions</a>
+    <a href="/teams" class="nav-item"><span class="nav-icon">👥</span>Teams</a>
+    <a href="/matches" class="nav-item"><span class="nav-icon">📊</span>Matches</a>
+    <a href="#" class="nav-item" onclick="logout()"><span class="nav-icon">👤</span><span
+        id="nav-auth-label">Login</span></a>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div class="tournaments-header-row">
+        <div>
+          <h1 class="page-header-title">DrukArena 2026 Tournaments</h1>
+          <p class="page-header-sub">The world's best players, clubs, and game communities rise up at DrukArena.</p>
+        </div>
+        <div class="tournaments-header-actions">
+          <span
+            class="year-pill">SELECT
+            YEAR: 2026</span>
+          <button class="btn btn-primary btn-sm" id="create-btn" onclick="window.location.href='/create-tournament'"
+            style="display:none;">+ Create</button>
+        </div>
+      </div>
+
+      <!-- FILTER TABS -->
+      <div class="filter-tabs tournaments-tabs">
+        <button class="filter-tab active" onclick="filterTournaments('all', this)">ALL</button>
+        <button class="filter-tab" onclick="filterTournaments('live', this)">LIVE</button>
+        <button class="filter-tab" onclick="filterTournaments('upcoming', this)">UPCOMING</button>
+        <button class="filter-tab" onclick="filterTournaments('ongoing', this)">ONGOING</button>
+        <button class="filter-tab" onclick="filterTournaments('completed', this)">COMPLETED</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="tournaments-grid" id="tournaments-container">
+        <div class="tournaments-loading">
+          <div class="spinner"></div>
+          <p>Loading tournaments...</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/preview.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/tournaments.js"></script>
+
+  <script>
+    let allTournaments = [];
+
+    window.addEventListener('load', () => {
+      checkAuth().then(user => {
+        if (user) {
+          document.getElementById('create-btn').style.display = 'inline-flex';
+        }
+      });
+      loadTournaments();
+      setInterval(loadTournaments, 60000);
+    });
+
+    function loadTournaments() {
+      fetch('/api/tournaments')
+        .then(r => r.json())
+        .then(data => {
+          allTournaments = Array.isArray(data) ? data : [];
+          renderTournaments(allTournaments);
+        })
+        .catch(() => renderError());
+    }
+
+    function filterTournaments(status, btn) {
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = status === 'all'
+        ? allTournaments
+        : allTournaments.filter(t => t.status === status);
+      renderTournaments(filtered);
+    }
+
+    function renderTournaments(list) {
+      const container = document.getElementById('tournaments-container');
+      if (list.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🎮</div><div class="empty-state-title">No tournaments found</div><div class="empty-state-desc">Try a different filter or check back soon.</div></div>';
+        return;
+      }
+      container.innerHTML = list.map(t => buildTournamentCard(t, true)).join('');
+    }
+
+    function renderError() {
+      document.getElementById('tournaments-container').innerHTML =
+        '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Could not load tournaments</div></div>';
+    }
+  </script>
+
+</body>
+
+</html>

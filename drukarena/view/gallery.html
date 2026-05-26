@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/gallery-page.css">
+</head>
+<body>
+<nav class="sidebar"></nav>
+
+<main class="main-content">
+  <div class="page-header gallery-header">
+    <div>
+      <h1 class="page-header-title">Match Gallery</h1>
+      <p class="page-header-sub">Share event photos with the DrukArena community.</p>
+    </div>
+  </div>
+
+  <section class="section gallery-layout">
+    <form class="glass-panel gallery-upload" id="gallery-form">
+      <h2 class="section-title">Upload Photo</h2>
+      <div class="alert alert-error" id="gallery-error"></div>
+      <div class="alert alert-success" id="gallery-success"></div>
+      <div class="form-group">
+        <label class="form-label">Photo Title</label>
+        <input class="form-input" name="title" id="gallery-title" placeholder="Grand finals moment">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Match Photo</label>
+        <input class="form-input" name="image" id="gallery-image" type="file" accept="image/*" capture="environment">
+      </div>
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
+
+    <div>
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Community Photos</h2>
+          <p class="section-subtitle" id="gallery-count">Loading gallery...</p>
+        </div>
+      </div>
+      <div class="gallery-grid" id="gallery-grid">
+        <div class="gallery-loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="gallery-rules-modal open" id="gallery-rules-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-rules-title">
+  <div class="gallery-rules-panel">
+    <h2 class="section-title" id="gallery-rules-title">Photo Upload Rules</h2>
+    <ul>
+      <li>Upload real DrukArena, campus, tournament, team, or match photos only.</li>
+      <li>Do not upload offensive, private, violent, misleading, or unrelated images.</li>
+      <li>Do not upload someone else's photo if you do not have permission to share it.</li>
+      <li>Inappropriate uploads may be deleted, and logged-in accounts may be blocked or removed.</li>
+    </ul>
+    <button class="btn btn-primary btn-full" type="button" id="gallery-rules-agree">I Agree</button>
+  </div>
+</div>
+
+<script>
+  window.galleryRulesAccepted = false;
+  window.acceptGalleryRules = function () {
+    window.galleryRulesAccepted = true;
+    document.body.dataset.galleryRulesAccepted = 'true';
+    var modal = document.getElementById('gallery-rules-modal');
+    if (modal) modal.classList.remove('open');
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    var agree = document.getElementById('gallery-rules-agree');
+    if (agree) agree.addEventListener('click', window.acceptGalleryRules);
+  });
+</script>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/gallery.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teams — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/teams-page.css">
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item"><span class="nav-icon">⚔</span>Competitions</a>
+  <a href="/teams" class="nav-item active"><span class="nav-icon">👥</span>Teams</a>
+  <a href="/matches" class="nav-item"><span class="nav-icon">📊</span>Matches</a>
+</nav>
+
+<main class="main-content">
+
+  <div class="page-header">
+    <h1 class="page-header-title">Teams</h1>
+    <p class="page-header-sub">Create or join a team for your favourite tournament.</p>
+  </div>
+
+  <div class="section">
+
+    <!-- CREATE TEAM FORM (logged-in users) -->
+    <div class="glass-panel team-create-panel" id="create-team-panel">
+      <h3 class="team-form-title">Create a Team</h3>
+
+      <div class="alert alert-error" id="team-error"></div>
+      <div class="alert alert-success" id="team-success"></div>
+
+      <div class="team-form-grid">
+        <div class="form-group">
+          <label class="form-label">Team Name</label>
+          <input class="form-input" id="team-name" placeholder="e.g. Thunder Dragons" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tournament</label>
+          <select class="form-select" id="team-tournament">
+            <option value="">Select tournament...</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="createTeam()">Create Team</button>
+    </div>
+
+    <div class="teams-toolbar">
+      <h2 class="teams-list-title">All Teams</h2>
+      <button class="btn btn-secondary btn-sm" id="show-create-btn" onclick="toggleCreatePanel()" style="display:none;">+ Create Team</button>
+    </div>
+
+    <div id="teams-container" class="teams-grid">
+      <div class="teams-loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- Team Detail Modal -->
+<div class="modal-overlay" id="team-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeTeamModal()">✕</button>
+    <div id="team-modal-content"></div>
+  </div>
+</div>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/teams.js"></script>
+
+<script>
+  window.addEventListener('load', () => {
+    checkAuth().then(user => {
+      if (user) {
+        document.getElementById('show-create-btn').style.display = 'inline-flex';
+        loadTournamentOptions();
+      }
+    });
+    loadAllTeams();
+  });
+
+  function toggleCreatePanel() {
+    const p = document.getElementById('create-team-panel');
+    p.style.display = p.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function loadTournamentOptions() {
+    fetch('/api/tournaments')
+      .then(r => r.json())
+      .then(data => {
+        const sel = document.getElementById('team-tournament');
+        (data || []).forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.tournament_id;
+          opt.textContent = `${t.game_title} — ${t.title}`;
+          sel.appendChild(opt);
+        });
+      });
+  }
+
+  function loadAllTeams() {
+    // We load teams per tournament; first get all tournaments
+    fetch('/api/tournaments')
+      .then(r => r.json())
+      .then(async tournaments => {
+        const container = document.getElementById('teams-container');
+        let allTeams = [];
+        for (const t of (tournaments || [])) {
+          const res = await fetch('/api/tournament/' + t.tournament_id + '/teams');
+          const teams = await res.json();
+          if (Array.isArray(teams)) {
+            teams.forEach(team => { team._game = t.game_title; });
+            allTeams = allTeams.concat(teams);
+          }
+        }
+        if (allTeams.length === 0) {
+          container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">👥</div><div class="empty-state-title">No Teams Yet</div><div class="empty-state-desc">Be the first to create one!</div></div>';
+          return;
+        }
+        container.innerHTML = allTeams.map(t => `
+          <div class="glass-panel" style="cursor:pointer; transition:0.2s;" onclick="viewTeam(${t.team_id})" onmouseenter="this.style.borderColor='var(--neon-green)'" onmouseleave="this.style.borderColor=''">
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+              <div class="rank-avatar">${t.team_name[0].toUpperCase()}</div>
+              <div>
+                <div style="font-weight:700; font-size:16px;">${t.team_name}</div>
+                <div style="color:var(--text-secondary); font-size:12px;">${t._game || ''}</div>
+              </div>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary);">Team #${t.team_id}</div>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('teams-container').innerHTML =
+          '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Could not load teams</div></div>';
+      });
+  }
+
+  function viewTeam(id) {
+    fetch('/api/team/' + id)
+      .then(r => r.json())
+      .then(data => {
+        const { team, members } = data;
+        const memberRows = (members || []).map(m => `
+          <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border-color);">
+            <div class="rank-avatar" style="width:36px;height:36px;font-size:14px;">${m.username[0].toUpperCase()}</div>
+            <div style="flex:1"><div style="font-weight:600">${m.username}</div><div style="color:var(--text-secondary);font-size:11px">${m.role}</div></div>
+          </div>
+        `).join('');
+        document.getElementById('team-modal-content').innerHTML = `
+          <h2 class="modal-title">${team.team_name}</h2>
+          <p style="color:var(--text-secondary);font-size:13px;margin-bottom:24px;">Team #${team.team_id}</p>
+          <h3 style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:16px;">ROSTER</h3>
+          ${memberRows || '<div style="color:var(--text-secondary);">No members yet.</div>'}
+        `;
+        document.getElementById('team-modal').classList.add('open');
+      });
+  }
+
+  function closeTeamModal() {
+    document.getElementById('team-modal').classList.remove('open');
+  }
+</script>
+
+</body>
+</html>

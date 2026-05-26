@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament — DrukArena</title>
+  <script>
+    (function () {
+      var staticPreview = window.location.protocol === 'file:' || window.location.pathname.startsWith('/view/');
+      var href = staticPreview ? 'css/style.css' : '/css/style.css';
+      document.write('<link rel="stylesheet" href="' + href + '">');
+      document.write('<link rel="stylesheet" href="' + (staticPreview ? 'css/tournament-detail-page.css' : '/css/tournament-detail-page.css') + '">');
+    })();
+  </script>
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item active"><span class="nav-icon">⚔</span>Competitions</a>
+  <a href="/teams" class="nav-item"><span class="nav-icon">👥</span>Teams</a>
+  <a href="/matches" class="nav-item"><span class="nav-icon">📊</span>Matches</a>
+</nav>
+
+<main class="main-content">
+
+  <div id="tournament-detail" class="tournament-detail-shell">
+    <div class="detail-back-row">
+      <a href="/tournaments" id="back-link" class="back-link">← BACK TO TOURNAMENTS</a>
+    </div>
+    <div class="detail-loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  (function loadScripts() {
+    const staticPreview = window.location.protocol === 'file:' || window.location.pathname.startsWith('/view/');
+    const prefix = staticPreview ? 'js/' : '/js/';
+    ['preview.js', 'nav.js', 'auth.js', 'tournaments.js', 'teams.js'].forEach(name => {
+      const script = document.createElement('script');
+      script.src = prefix + name;
+      document.body.appendChild(script);
+    });
+  })();
+
+  const staticPreview = window.location.protocol === 'file:' || window.location.pathname.startsWith('/view/');
+  const tournamentId = window.location.pathname.split('/').pop();
+
+  window.addEventListener('load', () => {
+    const backLink = document.getElementById('back-link');
+    if (backLink && staticPreview) backLink.href = 'tournaments.html';
+
+    if (staticPreview) {
+      renderPreviewTournament();
+      return;
+    }
+
+    loadTournamentDetail(tournamentId);
+    loadTournamentParticipants(tournamentId);
+    setInterval(() => {
+      loadTournamentDetail(tournamentId);
+      loadTournamentParticipants(tournamentId);
+    }, 60000);
+  });
+
+  function loadTournamentDetail(id) {
+    fetch('/api/tournament/' + id)
+      .then(r => r.json())
+      .then(t => {
+        const statusClass = t.status === 'ongoing' ? 'ongoing' : t.status === 'completed' ? 'completed' : '';
+        const isClosed = t.status === 'ongoing' || t.status === 'completed' || (t.max_teams && t.participant_count >= t.max_teams);
+        const joinLabel = t.max_teams && t.participant_count >= t.max_teams ? 'Tournament Full' : 'Join Tournament';
+        document.getElementById('tournament-detail').innerHTML = `
+          <div style="padding: 40px 0 20px;"><a href="${staticPreview ? 'tournaments.html' : '/tournaments'}" style="color:var(--text-secondary); font-size:12px; text-decoration:none; letter-spacing:2px;">← BACK TO TOURNAMENTS</a></div>
+
+          <div style="display:flex; gap:60px; flex-wrap:wrap; margin-bottom:60px; align-items:flex-start;">
+            <div style="flex:1; min-width:280px;">
+              <span class="tournament-status-badge ${statusClass}">${t.status.toUpperCase()}</span>
+              <h1 style="font-family:Montserrat,sans-serif; font-weight:900; font-size:clamp(36px,5vw,60px); text-transform:uppercase; letter-spacing:-2px; line-height:0.95; margin-bottom:24px;">${t.game_title}</h1>
+              <h2 style="font-size:18px; color:var(--text-secondary); font-weight:400; margin-bottom:32px;">${t.title}</h2>
+              <p style="color:var(--text-secondary); line-height:1.7; max-width:500px;">${t.description || 'No description provided.'}</p>
+            </div>
+
+            <div class="glass-panel" style="min-width:280px; flex:0 0 320px;">
+              <div class="tournament-info-row">
+                <span class="tournament-info-label">Start – End</span>
+                <span class="tournament-info-value">${t.start_date} – ${t.end_date}</span>
+              </div>
+              <div class="tournament-info-row">
+                <span class="tournament-info-label">Venue</span>
+                <span class="tournament-info-value">${t.venue || 'Online'}</span>
+              </div>
+              <div class="tournament-info-row">
+                <span class="tournament-info-label">Prize Pool</span>
+                <span class="tournament-info-value" style="color:var(--neon-gold)">${t.prize_pool || 'TBA'}</span>
+              </div>
+              <div class="tournament-info-row">
+                <span class="tournament-info-label">Players</span>
+                <span class="tournament-info-value">${t.participant_count || 0}/${t.max_teams}</span>
+              </div>
+              <div style="margin-top:20px; display:flex; gap:8px; flex-direction:column;">
+                <button class="btn btn-primary" ${isClosed ? 'disabled' : ''} onclick="joinTournament(${t.tournament_id}, event)">${isClosed ? 'Joining Closed' : joinLabel}</button>
+                <button class="btn btn-secondary">View Schedule</button>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="font-family:Montserrat,sans-serif; font-weight:900; font-size:20px; text-transform:uppercase; margin-bottom:24px; border-bottom:1px solid var(--border-color); padding-bottom:16px;">Joined Players</h2>
+          <div id="participants-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:60px;">
+            <div class="spinner"></div>
+          </div>
+        `;
+      })
+      .catch(() => {
+        document.getElementById('tournament-detail').innerHTML += '<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Tournament not found</div></div>';
+      });
+  }
+
+  function loadTournamentParticipants(id) {
+    setTimeout(() => {
+      fetch('/api/tournament/' + id + '/participants')
+        .then(r => r.json())
+        .then(players => {
+          const container = document.getElementById('participants-list');
+          if (!container) return;
+          if (!players || players.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-secondary); font-size:14px;">No players have joined yet. Be the first!</div>';
+            return;
+          }
+          container.innerHTML = players.map(p => `
+            <div class="glass-panel" style="text-align:center;">
+              <div class="rank-avatar" style="margin:0 auto 12px; width:56px; height:56px; font-size:24px;">${p.username ? p.username[0].toUpperCase() : 'P'}</div>
+              <div style="font-weight:700; font-size:14px;">${p.username || 'Player'}</div>
+              <div style="color:var(--text-secondary); font-size:12px; margin-top:4px;">Player #${p.user_id}</div>
+            </div>
+          `).join('');
+        })
+        .catch(() => {});
+    }, 500);
+  }
+
+  function renderPreviewTournament() {
+    document.getElementById('tournament-detail').innerHTML = `
+      <div style="padding: 40px 0 20px;"><a href="tournaments.html" style="color:var(--text-secondary); font-size:12px; text-decoration:none; letter-spacing:2px;">← BACK TO TOURNAMENTS</a></div>
+
+      <div style="display:flex; gap:60px; flex-wrap:wrap; margin-bottom:60px; align-items:flex-start;">
+        <div style="flex:1; min-width:280px;">
+          <span class="tournament-status-badge">PREVIEW</span>
+          <h1 style="font-family:Montserrat,sans-serif; font-weight:900; font-size:clamp(36px,5vw,60px); text-transform:uppercase; letter-spacing:-2px; line-height:0.95; margin-bottom:24px;">Valorant</h1>
+          <h2 style="font-size:18px; color:var(--text-secondary); font-weight:400; margin-bottom:32px;">Static tournament preview</h2>
+          <p style="color:var(--text-secondary); line-height:1.7; max-width:500px;">This preview card lets you inspect the tournament detail layout without needing a live API route or tournament ID.</p>
+        </div>
+
+        <div class="glass-panel" style="min-width:280px; flex:0 0 320px;">
+          <div class="tournament-info-row">
+            <span class="tournament-info-label">Start – End</span>
+            <span class="tournament-info-value">2026-07-06 – 2026-08-23</span>
+          </div>
+          <div class="tournament-info-row">
+            <span class="tournament-info-label">Venue</span>
+            <span class="tournament-info-value">Thimphu</span>
+          </div>
+          <div class="tournament-info-row">
+            <span class="tournament-info-label">Prize Pool</span>
+            <span class="tournament-info-value" style="color:var(--neon-gold)">Nu. 50,000</span>
+          </div>
+          <div class="tournament-info-row">
+            <span class="tournament-info-label">Players</span>
+            <span class="tournament-info-value">3/16</span>
+          </div>
+        </div>
+      </div>
+
+      <h2 style="font-family:Montserrat,sans-serif; font-weight:900; font-size:20px; text-transform:uppercase; margin-bottom:24px; border-bottom:1px solid var(--border-color); padding-bottom:16px;">Joined Players</h2>
+      <div id="participants-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:60px;">
+        <div class="glass-panel" style="text-align:center;">
+          <div class="rank-avatar" style="margin:0 auto 12px; width:56px; height:56px; font-size:24px;">T</div>
+          <div style="font-weight:700; font-size:14px;">Thinley</div>
+          <div style="color:var(--text-secondary); font-size:12px; margin-top:4px;">Preview Player</div>
+        </div>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>

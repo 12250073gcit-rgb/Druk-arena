@@ -1,0 +1,45 @@
+/* Tournament detail page */
+
+.tournament-detail-shell {
+  padding: 0 40px 60px;
+}
+
+.detail-back-row {
+  padding: 40px 0 20px;
+}
+
+.detail-loading {
+  text-align: center;
+  padding: 80px;
+}
+
+.back-link {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+
+.tournament-detail-shell h1,
+.tournament-detail-shell h2,
+.tournament-detail-shell p {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .tournament-detail-shell {
+    padding: 0 16px 48px;
+  }
+
+  .detail-back-row {
+    padding: 24px 0 12px;
+  }
+
+  .detail-loading {
+    padding: 56px 16px;
+  }
+
+  .tournament-detail-shell h1 {
+    letter-spacing: 0 !important;
+  }
+}

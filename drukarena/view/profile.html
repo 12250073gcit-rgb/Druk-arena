@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Profile — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/profile-page.css">
+</head>
+<body>
+<nav class="sidebar"></nav>
+
+<main class="main-content">
+  <div class="page-header">
+    <h1 class="page-header-title">Player Profile</h1>
+      <p class="page-header-sub">Track your matches, wins, and player identity.</p>
+  </div>
+
+  <section class="section profile-layout">
+    <div class="glass-panel profile-card">
+      <div class="rank-avatar profile-avatar" id="profile-avatar">P</div>
+      <h2 class="profile-name" id="profile-name">Loading...</h2>
+      <p class="profile-meta" id="profile-username"></p>
+      <div class="profile-stats">
+        <div><strong id="profile-matches">0</strong><span>Matches</span></div>
+        <div><strong id="profile-wins">0</strong><span>Wins</span></div>
+      </div>
+    </div>
+
+    <div class="glass-panel">
+      <h2 class="section-title">Edit Profile</h2>
+      <div class="alert alert-error" id="profile-error"></div>
+      <div class="alert alert-success" id="profile-success"></div>
+      <div class="form-group">
+        <label class="form-label">Display Name</label>
+        <input class="form-input" id="profile-display-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preferred Role / Position</label>
+        <input class="form-input" id="profile-favorite-game" placeholder="e.g. Striker, Setter, IGL, Support">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bio</label>
+        <textarea class="form-textarea" id="profile-bio" rows="5"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+    </div>
+  </section>
+</main>
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

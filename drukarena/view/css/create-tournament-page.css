@@ -1,0 +1,67 @@
+/* Create tournament page */
+
+.tournament-form-page {
+  padding: 40px 60px;
+  max-width: calc(900px + var(--sidebar-w));
+}
+
+.create-page-heading {
+  margin-bottom: 32px;
+}
+
+.back-link {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+
+.create-title {
+  margin-top: 16px;
+  font-size: 32px;
+}
+
+.create-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-span-full {
+  grid-column: 1 / -1;
+}
+
+.create-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .tournament-form-page {
+    padding: 28px 16px;
+    max-width: none;
+  }
+
+  .create-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .create-actions {
+    flex-direction: column;
+  }
+
+  .create-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .tournament-form-page {
+    padding: 22px 14px 36px;
+  }
+
+  .create-title {
+    font-size: 26px;
+  }
+}

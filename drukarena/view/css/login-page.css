@@ -1,0 +1,52 @@
+/* Login page */
+
+.auth-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 60% 30%, rgba(212,160,23,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 30% 80%, rgba(204,34,0,0.08) 0%, transparent 50%);
+}
+
+.auth-logo-wrap {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-main);
+  box-shadow: 0 0 24px var(--gold-glow);
+}
+
+.auth-title,
+.auth-subtitle {
+  text-align: center;
+}
+
+.auth-submit {
+  clip-path: none;
+  border-radius: 3px;
+  margin-top: 8px;
+}
+
+.auth-footer {
+  margin-top: 20px;
+}
+
+@media (max-width: 540px) {
+  .auth-main {
+    align-items: flex-start;
+    min-height: auto;
+    padding: 20px 0 36px;
+  }
+
+  .auth-logo {
+    width: 68px;
+    height: 68px;
+  }
+}

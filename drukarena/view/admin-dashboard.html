@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — DrukArena</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/admin-dashboard-page.css">
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="/" class="sidebar-logo"> <img src="logo.png" alt="">Druk<br>Arena</a>
+  <a href="/" class="nav-item"><span class="nav-icon">⌂</span>Home</a>
+  <a href="/tournaments" class="nav-item"><span class="nav-icon">⚔</span>Competitions</a>
+  <a href="/admin" class="nav-item active"><span class="nav-icon">⚙</span>Admin</a>
+  <a href="#" class="nav-item auth-btn" onclick="logout()"><span class="nav-icon">⏻</span>Logout</a>
+</nav>
+
+<div class="main-content">
+  <div class="admin-layout">
+
+    <!-- ADMIN SIDEBAR -->
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-title">Admin Panel</div>
+
+      <button class="admin-nav-item active" onclick="showSection('overview', this)">
+        <span class="admin-nav-icon">📊</span> Overview
+      </button>
+      <button class="admin-nav-item" onclick="showSection('tournaments', this)">
+        <span class="admin-nav-icon">⚔</span> Tournaments
+      </button>
+      <button class="admin-nav-item" onclick="showSection('news', this)">
+        <span class="admin-nav-icon">📰</span> News
+      </button>
+      <button class="admin-nav-item" onclick="showSection('matches', this)">
+        <span class="admin-nav-icon">📅</span> Matches
+      </button>
+      <button class="admin-nav-item" onclick="showSection('users', this)">
+        <span class="admin-nav-icon">👥</span> Users
+      </button>
+      <button class="admin-nav-item" onclick="showSection('gallery', this)">
+        <span class="admin-nav-icon">▣</span> Gallery
+      </button>
+    </div>
+
+    <!-- ADMIN MAIN -->
+    <div class="admin-main">
+
+      <!-- ── OVERVIEW ── -->
+      <div class="admin-section active" id="section-overview">
+        <div class="admin-section-title">Overview</div>
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-tournaments">—</div>
+            <div class="stat-label">Tournaments</div>
+          </div>
+          <div class="stat-card admin-stat-teams">
+            <div class="stat-number" id="stat-teams" style="color:var(--neon-blue);">—</div>
+            <div class="stat-label">Teams</div>
+          </div>
+          <div class="stat-card admin-stat-users">
+            <div class="stat-number" id="stat-users" style="color:var(--neon-red);">—</div>
+            <div class="stat-label">Users</div>
+          </div>
+        </div>
+
+        <div class="admin-section-title admin-quick-title">Quick Actions</div>
+        <div class="quick-actions">
+          <div class="quick-action-card" onclick="window.location.href='/create-tournament'">
+            <span class="quick-action-icon">⚔</span>
+            <span class="quick-action-label">New Tournament</span>
+          </div>
+          <div class="quick-action-card" onclick="showSection('news', document.querySelector('[onclick*=news]'))">
+            <span class="quick-action-icon">📰</span>
+            <span class="quick-action-label">Add News</span>
+          </div>
+          <div class="quick-action-card" onclick="showSection('matches', document.querySelector('[onclick*=matches]'))">
+            <span class="quick-action-icon">📅</span>
+            <span class="quick-action-label">Schedule Match</span>
+          </div>
+          <div class="quick-action-card" onclick="showSection('users', document.querySelector('[onclick*=users]'))">
+            <span class="quick-action-icon">👥</span>
+            <span class="quick-action-label">View Users</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TOURNAMENTS ── -->
+      <div class="admin-section" id="section-tournaments">
+        <div class="admin-section-title">Tournament Management</div>
+
+        <div class="admin-toolbar">
+          <a href="/create-tournament" class="btn btn-primary btn-sm">+ New Tournament</a>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <span class="admin-table-title">All Tournaments</span>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Game</th>
+                <th>Status</th>
+                <th>Start</th>
+                <th>Prize Pool</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-tournaments-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:40px;"><div class="spinner" style="display:inline-block;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── NEWS ── -->
+      <div class="admin-section" id="section-news">
+        <div class="admin-section-title">News Management</div>
+
+        <div class="add-news-form">
+          <h3 class="admin-form-title">Add News Article</h3>
+          <div class="alert alert-error" id="news-error"></div>
+          <div class="alert alert-success" id="news-success"></div>
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input class="form-input" id="news-title" placeholder="News headline...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Content</label>
+            <textarea class="form-textarea" id="news-content" rows="4" placeholder="Write the full article..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL (optional)</label>
+            <input class="form-input" id="news-image" placeholder="https://...">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="addNews()">Publish Article</button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <span class="admin-table-title">Published News</span>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Published</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-news-tbody">
+              <tr><td colspan="3" style="text-align:center;padding:40px;"><div class="spinner" style="display:inline-block;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── MATCHES ── -->
+      <div class="admin-section" id="section-matches">
+        <div class="admin-section-title">Match Management</div>
+
+        <!-- Create Match Form -->
+        <div class="add-news-form" id="create-match-form">
+          <h3 class="admin-form-title">Schedule New Match</h3>
+          <div class="alert alert-error" id="match-error"></div>
+          <div class="alert alert-success" id="match-success"></div>
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label">Tournament</label>
+              <select class="form-select" id="match-tournament" onchange="loadMatchTeams(this.value)">
+                <option value="">Select tournament...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team 1</label>
+              <select class="form-select" id="match-team1"><option>Select tournament first</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team 2</label>
+              <select class="form-select" id="match-team2"><option>Select tournament first</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Match Date</label>
+              <input class="form-input" type="date" id="match-date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Match Time</label>
+              <input class="form-input" type="time" id="match-time">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="scheduleMatch()">Schedule Match</button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><span class="admin-table-title">All Matches</span></div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Team 1</th><th>vs</th><th>Team 2</th>
+                <th>Date</th><th>Status</th><th>Score</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-matches-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:40px;"><div class="spinner" style="display:inline-block;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── USERS ── -->
+      <div class="admin-section" id="section-users">
+        <div class="admin-section-title">User Management</div>
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><span class="admin-table-title">All Users</span></div>
+          <table class="admin-table">
+            <thead>
+              <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-users-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:40px;"><div class="spinner" style="display:inline-block;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── GALLERY ── -->
+      <div class="admin-section" id="section-gallery">
+        <div class="admin-section-title">Gallery Moderation</div>
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><span class="admin-table-title">Uploaded Photos</span></div>
+          <table class="admin-table">
+            <thead>
+              <tr><th>Title</th><th>Uploader</th><th>Email</th><th>Uploaded</th><th>Photo</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-gallery-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:40px;"><div class="spinner" style="display:inline-block;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /admin-main -->
+  </div><!-- /admin-layout -->
+</div><!-- /main-content -->
+
+<script src="js/preview.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/tournaments.js"></script>
+<script src="js/news.js"></script>
+<script src="js/matches.js"></script>
+<script src="js/admin.js"></script>
+
+<script>
+  // Guard: redirect if not admin
+  window.addEventListener('load', () => {
+    if (window.isStaticPreview) {
+      loadAdminData();
+      return;
+    }
+    checkAuth().then(user => {
+      if (!user || user.role !== 'admin') {
+        window.location.href = '/login';
+        return;
+      }
+      loadAdminData();
+    });
+  });
+
+  function showSection(name, btn) {
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    if (btn) btn.classList.add('active');
+    // Lazy-load section data
+    if (name === 'tournaments') loadAdminTournaments();
+    if (name === 'news') loadAdminNews();
+    if (name === 'matches') { loadAdminMatches(); loadMatchTournaments(); }
+    if (name === 'users') loadAdminUsers();
+    if (name === 'gallery') loadAdminGallery();
+  }
+</script>
+
+</body>
+</html>
