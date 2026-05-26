@@ -97,6 +97,9 @@
     sidebar.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', closeMobileNav);
     });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 540) closeMobileNav();
+    });
   }
 
   if (document.readyState === 'loading') {
