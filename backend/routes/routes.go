@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"drukarena/backend/controller"
 
@@ -19,7 +20,7 @@ func InitializeRoutes() {
 	router.PathPrefix("/view/").Handler(http.StripPrefix("/view/", http.FileServer(http.Dir("./view/"))))
 	router.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./view/css/"))))
 	router.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir("./view/js/"))))
-	router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(getEnv("UPLOAD_DIR", "./view/uploads")))))
+	router.PathPrefix("/uploads/").HandlerFunc(serveUpload)
 	router.Handle("/logo.png", http.FileServer(http.Dir("./view/")))
 	router.Handle("/hero-bg.png", http.FileServer(http.Dir("./view/")))
 
@@ -108,4 +109,37 @@ func getEnv(key, fallback string) string {
 		return val
 	}
 	return fallback
+}
+
+func serveUpload(w http.ResponseWriter, r *http.Request) {
+	filename := filepath.Base(r.URL.Path)
+	if filename == "." || filename == "/" {
+		http.NotFound(w, r)
+		return
+	}
+
+	for _, dir := range uploadDirs() {
+		path := filepath.Join(dir, filename)
+		if info, err := os.Stat(path); err == nil && !info.IsDir() {
+			http.ServeFile(w, r, path)
+			return
+		}
+	}
+	http.NotFound(w, r)
+}
+
+func uploadDirs() []string {
+	primary := getEnv("UPLOAD_DIR", filepath.Join("view", "uploads"))
+	fallback := filepath.Join(os.TempDir(), "drukarena", "uploads")
+	local := filepath.Join("view", "uploads")
+	dirs := []string{primary, fallback, local}
+	unique := dirs[:0]
+	seen := map[string]bool{}
+	for _, dir := range dirs {
+		if !seen[dir] {
+			seen[dir] = true
+			unique = append(unique, dir)
+		}
+	}
+	return unique
 }

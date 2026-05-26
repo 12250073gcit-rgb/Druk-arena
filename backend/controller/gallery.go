@@ -102,17 +102,10 @@ func UploadGallery(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uploadDir := getEnv("UPLOAD_DIR", filepath.Join("view", "uploads"))
-	if err := os.MkdirAll(uploadDir, 0755); err != nil {
-		httpResp.RespondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
 	filename := fmt.Sprintf("match-%d%s", time.Now().UnixNano(), ext)
-	destPath := filepath.Join(uploadDir, filename)
-	dest, err := os.Create(destPath)
+	dest, err := createUploadFile(filename)
 	if err != nil {
-		httpResp.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		httpResp.RespondWithError(w, http.StatusInternalServerError, "could not save image: "+err.Error())
 		return
 	}
 	defer dest.Close()
@@ -224,4 +217,29 @@ func getEnv(key, fallback string) string {
 		return val
 	}
 	return fallback
+}
+
+func createUploadFile(filename string) (*os.File, error) {
+	var lastErr error
+	for _, dir := range uploadDirs() {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			lastErr = err
+			continue
+		}
+		file, err := os.Create(filepath.Join(dir, filename))
+		if err == nil {
+			return file, nil
+		}
+		lastErr = err
+	}
+	return nil, lastErr
+}
+
+func uploadDirs() []string {
+	primary := getEnv("UPLOAD_DIR", filepath.Join("view", "uploads"))
+	fallback := filepath.Join(os.TempDir(), "drukarena", "uploads")
+	if primary == fallback {
+		return []string{primary}
+	}
+	return []string{primary, fallback}
 }

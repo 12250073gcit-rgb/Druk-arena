@@ -11,7 +11,7 @@ services:
           name: drukarena-db
           property: connectionString
       - key: UPLOAD_DIR
-        value: /var/data/uploads
+        value: /tmp/drukarena/uploads
 
 databases:
   - name: drukarena-db
