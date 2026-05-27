@@ -35,7 +35,7 @@ function buildTournamentCard(t, showActions = false) {
       </div>` : ''}
 
       <div class="tournament-card-actions">
-        <a href="/tournament/${t.tournament_id}" class="btn btn-secondary btn-sm" style="flex:1; text-align:center;">VISIT GAME PAGE</a>
+        <a href="/tournament/${t.tournament_id}" class="btn btn-secondary btn-sm">VISIT GAME PAGE</a>
         ${!isAdmin ? `<button class="btn btn-primary btn-sm" ${isClosed ? 'disabled' : ''} onclick="joinTournament(${t.tournament_id}, event)">${isClosed ? joinLabel : 'JOIN'}</button>` : ''}
         ${isAdmin && showActions ? `
           <button class="btn btn-danger btn-sm" onclick="deleteTournament(${t.tournament_id}, event)">DEL</button>

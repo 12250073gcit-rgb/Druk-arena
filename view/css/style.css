@@ -789,8 +789,10 @@ body.nav-collapsed .nav-item .nav-icon {
     flex-wrap: wrap;
   }
 
-  .tournament-card-actions .btn {
-    flex: 1 1 140px;
+  @media (min-width: 541px) {
+    .tournament-card-actions .btn {
+      flex: 1 1 140px;
+    }
   }
 }
 
@@ -1013,7 +1015,9 @@ body.nav-collapsed .nav-item .nav-icon {
 
   .tournament-card-actions .btn {
     width: 100%;
-    flex: 0 0 auto !important;
+    flex: none !important;
+    height: 44px;
+    max-height: 44px;
   }
 
   .empty-state {
