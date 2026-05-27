@@ -917,7 +917,51 @@ body.nav-collapsed .nav-item .nav-icon {
   .countdown-label { font-size: 8px; letter-spacing: 2px; }
 
   .hero-cta { flex-direction: column; width: 100%; max-width: 280px; }
-  .hero-cta .btn { width: 100%; clip-path: none; border-radius: 3px; }
+  .hero-cta .btn { width: 100%; }
+
+  .btn,
+  .btn-sm,
+  .btn-full,
+  .auth-submit,
+  .gallery-upload .btn,
+  .team-create-panel .btn,
+  .tournament-form-page .btn,
+  .profile-layout .btn {
+    min-height: 44px;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 6px;
+    clip-path: none;
+    font-size: 12px;
+    letter-spacing: 1.4px;
+    line-height: 1;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .btn-sm {
+    min-height: 40px;
+    width: auto;
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+
+  .mobile-nav .btn,
+  .mobile-nav .btn-sm,
+  #mobile-auth-btn {
+    width: auto;
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .section-header .btn,
+  .teams-toolbar .btn,
+  .tournaments-header-actions .btn {
+    width: auto;
+  }
 
   .news-grid { grid-template-columns: 1fr; }
   .tournaments-grid { grid-template-columns: 1fr; }
@@ -986,9 +1030,12 @@ body.nav-collapsed .nav-item .nav-icon {
   .section-title { font-size: 18px; }
 
   .filter-tabs { gap: 0; }
-  .filter-tab { padding: 10px 12px; font-size: 9px; }
-
-  .btn-sm { font-size: 9px; padding: 8px 14px; }
+  .filter-tab {
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+  }
 
   .game-titles-grid { gap: 20px; }
   .game-title-item { font-size: 12px; }
