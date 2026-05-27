@@ -1008,10 +1008,12 @@ body.nav-collapsed .nav-item .nav-icon {
 
   .tournament-card-actions {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .tournament-card-actions .btn {
     width: 100%;
+    flex: 0 0 auto !important;
   }
 
   .empty-state {
